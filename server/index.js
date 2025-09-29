@@ -21,7 +21,7 @@ connectDb()
 // Middleware setup
 app.use(express.json()) // Parse JSON request bodies
 app.use(cors({
-    origin:[process.env.ORIGIN,'http://localhost:3000'], // Allow cross-origin requests from frontend
+    origin:[process.env.ORIGIN,'https://clothai.netlify.app'], // Allow cross-origin requests from frontend
     credentials:true // Allow cookies to be sent with requests
 }))
 app.use(cookieParser()) // Parse cookies from request headers
