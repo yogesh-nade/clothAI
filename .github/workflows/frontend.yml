@@ -29,6 +29,13 @@ jobs:
       - name: Build
         run: cd client && npm run build
 
+      # Save dist folder for later jobs
+      - name: Upload production build
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-dist
+          path: client/dist
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -37,12 +44,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Download the build artifact from previous job
+      - name: Download production build
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-dist
+          path: client/dist
+
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
           publish-dir: ./client/dist
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          production-deploy: true
           deploy-message: "Automated deploy from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
